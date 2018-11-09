@@ -1,14 +1,14 @@
-#define TASK_STK_SIZE		256	// Size of each task's stacks (# of bytes)
-#define OS_MAX_EVENTS 		5
-#define OS_MAX_TASKS 		15
-#define OS_TASK_STAT_EN		1		// Enable statistics task creation
-#define OS_TICKS_PER_SEC 	256		// Number of Ticks
-#define ON 		1
-#define OFF 	0
+#define TASK_STK_SIZE 256	// Size of each task's stacks (# of bytes)
+#define OS_MAX_EVENTS 5
+#define OS_MAX_TASKS 15
+#define OS_TASK_STAT_EN 1		// Enable statistics task creation
+#define OS_TICKS_PER_SEC 256		// Number of Ticks
+#define ON 1
+#define OFF 0
 #use "ucos2.lib"
 char DutyCycle;
 char TaskData[3];						// Parameters to pass to each task
-OS_EVENT		*DigOut;             // Define DigOut as an event
+OS_EVENT *DigOut;             // Define DigOut as an event
 
 void Task1(void *data);			// Function prototypes of task 1
 void Task2(void *data);			// Function prototypes of task 2
@@ -29,8 +29,8 @@ void main (void){
 
 void TaskStart (void *data){
     auto UBYTE err;
-    auto WORD   key;
-    static char   s[100];
+    auto WORD key;
+    static char s[100];
     OSStatInit();
 
     OSTaskCreate(Task1, (void *)TaskData[0], TASK_STK_SIZE, 11);
