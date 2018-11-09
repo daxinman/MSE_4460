@@ -1,4 +1,4 @@
-#define  TASK_STK_SIZE		256	// Size of each task's stacks (# of bytes)
+#define TASK_STK_SIZE		256	// Size of each task's stacks (# of bytes)
 #define OS_MAX_EVENTS 		5
 #define OS_MAX_TASKS 		15
 #define OS_TASK_STAT_EN		1		// Enable statistics task creation
@@ -10,13 +10,13 @@ char DutyCycle;
 char TaskData[3];						// Parameters to pass to each task
 OS_EVENT		*DigOut;             // Define DigOut as an event
 
-void   Task1(void *data);			// Function prototypes of task 1
-void   Task2(void *data);			// Function prototypes of task 2
-void	 Task3(void *data);
+void Task1(void *data);			// Function prototypes of task 1
+void Task2(void *data);			// Function prototypes of task 2
+void Task3(void *data);
 
-void   TaskStart(void *data);		// Function prototypes of Startup task
-void   DispStr(int x, int y, char *s);	// Function prototypes of Display String function
-void	 DisplayTower(void);
+void TaskStart(void *data);		// Function prototypes of Startup task
+void DispStr(int x, int y, char *s);	// Function prototypes of Display String function
+void DisplayTower(void);
 
 void main (void){
 	brdInit();							// Initialize MCU baord

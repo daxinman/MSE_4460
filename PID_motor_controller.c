@@ -1,35 +1,35 @@
 /*  Definitions  */
-#define  TASK_STK_SIZE		256         // Size of each task's stacks (# of bytes)
-#define  PotMax				1031			// Maximum POT poistion reading
-#define	PotMin				2088			// Minimum POT position reading
-#define	IrVmax				1500			// Maximum IR Sesnor reading
-#define	IrVmin				1990			// Minimum IR Sensor reading
-#define  MAX_COUNT			100
-#define	ON						1				// Both experimental, and development board work on an active low configuration
-#define	OFF					0				// Both experimental, and development board work on an active low configuration
-#define	N_TASKS				4				// Number of tasks
-#define  IrMax					1650  //Lab1
-#define  IrMin 				2050  //Lab1
+#define TASK_STK_SIZE		256         // Size of each task's stacks (# of bytes)
+#define PotMax 1031			// Maximum POT poistion reading
+#define	PotMin 2088			// Minimum POT position reading
+#define	IrVmax 1500			// Maximum IR Sesnor reading
+#define	IrVmin 1990			// Minimum IR Sensor reading
+#define MAX_COUNT 100
+#define	ON 1				// Both experimental, and development board work on an active low configuration
+#define	OFF 0				// Both experimental, and development board work on an active low configuration
+#define	N_TASKS 4				// Number of tasks
+#define IrMax 1650  //Lab1
+#define IrMin 2050  //Lab1
 
 
 
 // Redefine uC/OS-II configuration constants as necessary
-#define  OS_MAX_EVENTS		2           // Maximum number of events (semaphores, queues, mailboxes)
-#define  OS_MAX_TASKS		11          // Maximum number of tasks system can create (less stat and idle tasks)
-#define  OS_TASK_STAT_EN	1           // Enable statistics task creation
-#define  OS_TICKS_PER_SEC	128         // Number of Ticks per second
+#define OS_MAX_EVENTS		2           // Maximum number of events (semaphores, queues, mailboxes)
+#define OS_MAX_TASKS		11          // Maximum number of tasks system can create (less stat and idle tasks)
+#define OS_TASK_STAT_EN	1           // Enable statistics task creation
+#define OS_TICKS_PER_SEC	128         // Number of Ticks per second
 
 /* Other Definitions */
-#define POT_CHAN				0                    // channel 0 of ADC (ADC0)
-#define IRS_CHAN				1							// channel 1 of ADC (ADC1)
-#define MOT_CHAN				1                    // channel 1 of digital output (OUT1)
-#define MAX_PWIDTH			900                // the maximum pulse width in TMRB clock cycles
+#define POT_CHAN 0                    // channel 0 of ADC (ADC0)
+#define IRS_CHAN 1							// channel 1 of ADC (ADC1)
+#define MOT_CHAN 1                    // channel 1 of digital output (OUT1)
+#define MAX_PWIDTH 900                // the maximum pulse width in TMRB clock cycles
 
 //#define STDIO_DISABLE_FLOATS
 
 /* Variable declarations */
-char	TMRB_MSB;									// this 8-bit value will be written to TBM2R (bits 8 and 9 of TMRB2 match register)
-char	TMRB_LSB;									// this 8-bit value will be written to TBL2R (bits 0 to 7 of TMRB2 match register)
+char TMRB_MSB;									// this 8-bit value will be written to TBM2R (bits 8 and 9 of TMRB2 match register)
+char TMRB_LSB;									// this 8-bit value will be written to TBL2R (bits 0 to 7 of TMRB2 match register)
 int	PulseWidth;                         // Duty Cycle of the PWM signal
 float	PotNorm;										// Scaled value of the POT reading
 int potNormInt;
@@ -101,13 +101,11 @@ void TaskStart (void *data)
     }
 }
 
-
 nodebug void TaskInput (void *date)
 {
 	auto	UBYTE err;
    char	display[64];
    int	PotRead;
-
 
    for(;;) {
 
@@ -129,7 +127,6 @@ nodebug void TaskInput (void *date)
    }
 }
 
-
 nodebug void TaskControl (void *data)
 {
    auto UBYTE err;
@@ -145,25 +142,22 @@ nodebug void TaskControl (void *data)
       if(IrSen > 2000){
 	      IrNorm = 0;
       }
-
 			else if(IrSen < 1500){
 	      IrNorm = 1;
       }
-
 			else{
+	    		if(IrSen > 1950){
 
-      if(IrSen > 1950){
-
-	      IrNorm = (float)(IrSen - 1950);
-	      IrNorm = (float) (IrNorm / 50);
-	      IrNorm = 1 - IrNorm;
-	      IrNorm = IrNorm/2;
-      }
-      else{
-	      IrNorm = (float)(IrSen - 1500);
-	      IrNorm = (float)((IrNorm)/(500));
-	      IrNorm = 1 - IrNorm;
-      }
+		      IrNorm = (float)(IrSen - 1950);
+		      IrNorm = (float) (IrNorm / 50);
+		      IrNorm = 1 - IrNorm;
+		      IrNorm = IrNorm/2;
+	      }
+	      else{
+		      IrNorm = (float)(IrSen - 1500);
+		      IrNorm = (float)((IrNorm)/(500));
+		      IrNorm = 1 - IrNorm;
+	      }
 
       }
       ballPosition = 44 * IrNorm;
@@ -173,7 +167,6 @@ nodebug void TaskControl (void *data)
 			PID_error = Pgain*(ErrSig) + Dgain*(ErrSig-pastErrSig)*0.5*(1/128) + Igain*(ErrSig+pastErrSig)*128;
       PulseWidth = (int)((0.7 + PID_error)*MAX_PWIDTH);
 			// the above code is explained in the project report
-
 
       	if(PulseWidth < 0){
 	         PulseWidth = 0;
